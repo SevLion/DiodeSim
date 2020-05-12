@@ -33,17 +33,29 @@ public class Main extends Application {
         Button button = new Button("Pull!");
         root.getChildren().add(chart);
 
-        final DoubleDataSet dataSet1 = new DoubleDataSet("data #1");
-        chart.getDatasets().addAll(dataSet1);
+        final DoubleDataSet signal1 = new DoubleDataSet("signal1");
+        final DoubleDataSet response = new DoubleDataSet("response");
+        chart.getDatasets().addAll(signal1);
+        chart.getDatasets().addAll(response);
 
-        final double[] xValues = getRange(-0.1, 0.8, N_SAMPLES);
-        final double[] yValues1 = new double[N_SAMPLES];
+        final double[] xValues = getRange(0.01, 10, N_SAMPLES);
+        double[] yValues1 = new double[N_SAMPLES]; //final
+        double[] rValues = new double[N_SAMPLES];
+        //-------------------------------//
+        Diode diode = new Diode();
+        Signal signal = new Signal();
+
+          yValues1 = signal.sin(xValues, 1);
+          rValues = diode.getResponse(yValues1);
         for (int i = 0; i < N_SAMPLES; i++) {
             //xValues[n] = n;
-            yValues1[i] = I_s*Math.exp(xValues[i]/U_T - 1);
+            //yValues1[i] = I_s*Math.exp(xValues[i]/U_T - 1);
+            //yValues1[i] = diode.doStep(xValues[i]);
+            //yValues1[i] = signal.sin(xValues, 1.5);
         }
-        dataSet1.set(xValues, yValues1);
-
+        signal1.set(xValues, yValues1);
+        response.set(xValues, rValues);
+/*
         Image image = new Image("https://static.scientificamerican.com/sciam/cache/file/5C51E427-1715-44E6-9B14D9487D7B7F2D_source.jpg");
         ImageView imageView = new ImageView(image);
         imageView.setFitHeight(256);
@@ -59,7 +71,7 @@ public class Main extends Application {
 
         root.getChildren().add(imageView);
         root.getChildren().addAll(button);
-
+*/
         PrimaryStage.setTitle("DiodeSim");
         PrimaryStage.setScene(new Scene(root, 800, 600));
         PrimaryStage.setOnCloseRequest(evt -> System.exit(0));
