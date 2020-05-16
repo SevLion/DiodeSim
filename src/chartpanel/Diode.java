@@ -8,7 +8,7 @@ public class Diode {
     double T = T_c + TOFFSET; //Diode temperature
 
     //Minimal Conduction
-    //double GMIN = 1e-12; //Minimal conductance
+    double GMIN = 1e-12; //Minimal conductance
 
     //Thermal Voltage
     double N = 1.768; //Emission coefficient

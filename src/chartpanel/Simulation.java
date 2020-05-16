@@ -1,11 +1,21 @@
 package chartpanel;
 
 import de.gsi.chart.XYChart;
+import de.gsi.chart.renderer.Renderer;
+import de.gsi.chart.renderer.spi.ErrorDataSetRenderer;
 import de.gsi.dataset.spi.DoubleDataSet;
+
+import static de.gsi.dataset.DataSet.DIM_X;
+import static de.gsi.dataset.DataSet.DIM_Y;
 
 public class Simulation {
 
-    private static final int N_SAMPLES = 100000;
+    double Xmin = 0.2;
+    double Xmax = 1.0;
+
+    Diode diode = new Diode();
+
+    int N_SAMPLES = 250;
 
     void Transient(XYChart chart) {
         final DoubleDataSet signal1 = new DoubleDataSet("signal1");
@@ -15,12 +25,10 @@ public class Simulation {
         double[] yValues1 = new double[N_SAMPLES];
         double[] rValues = new double[N_SAMPLES];
 
-        Diode diode = new Diode();
+
         Signal signal = new Signal();
         yValues1 = signal.sin(xValues, 1);
         rValues = diode.getResponse(yValues1);
-
-
 
         signal1.set(xValues, yValues1);
         response.set(xValues, rValues);
@@ -29,27 +37,24 @@ public class Simulation {
         chart.getDatasets().addAll(response);
     }
 
+    final DoubleDataSet current_response = new DoubleDataSet("current_response");
     void Volt_Ampere(XYChart chart) {
-        //chart.getYAxis().getLogAxisType();
-        final DoubleDataSet current_response = new DoubleDataSet("current_response");
 
-        final double[] vin_values = getRange(-1, 1, N_SAMPLES);
+        final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
         double[] cout_values = new double[N_SAMPLES];
-        //double cout_max = 10;
-        //double cout_min = -10;
 
-        Diode diode = new Diode();
         cout_values = diode.getResponse(vin_values);
-        //cout_values = setYRange(cout_values, cout_min, cout_max);
-        System.out.print(vin_values[85000]);
-        System.out.println();
-        System.out.print(cout_values[85000]);
-
         current_response.set(vin_values, cout_values);
 
+        chart.getDatasets().removeAll();
         chart.getDatasets().addAll(current_response);
         chart.getYAxis().setName("I_d, А");
-        chart.getXAxis().setName("V_in, В");
+        chart.getXAxis().setName("V_d, В");
+        current_response.getAxisDescription(DIM_X).set("Voltage", "V_d");
+        current_response.getAxisDescription(DIM_Y).set("Current", "I_d");
+
+        Renderer renderer1 = new ErrorDataSetRenderer();
+        renderer1.getDatasets().add(current_response);
     }
 
 
@@ -61,14 +66,5 @@ public class Simulation {
             range[i] = range[i - 1] + inc;
         }
         return range;
-    }
-
-    double[] setYRange(double[] data, double ymin, double ymax) {
-        for(double i:data) {
-            if(i > ymax || i < ymin) {
-                i = 0;
-            }
-        }
-        return data;
     }
 }
