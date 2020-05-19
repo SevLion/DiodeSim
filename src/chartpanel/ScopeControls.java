@@ -9,23 +9,29 @@ import javafx.scene.layout.GridPane;
 
 public class ScopeControls {
     public void AddControls(Simulation sim, XYChart showingPlot, DefaultNumericAxis xAxis, DefaultNumericAxis yAxis, GridPane scopeControls) {
+        //Добавление полей
         {//Scope settings
             {
+                //Слева в таблицу добавляем Label, справа - NumberField
                 Label variable = new Label("Xmin: ");
                 scopeControls.add(variable, 0, 0);
                 NumberField varField = new NumberField();
                 varField.setPromptText("Xmin");
                 scopeControls.add(varField, 1, 0);
 
+                //Прерывание при действии с NumberField (нажатие Enter)
                 varField.setOnAction(e -> {
                     if ((varField.getText() != null && !varField.getText().isEmpty())) {
+                        //Устанавливаем новое значение Xmin из varField
                         sim.Xmin = varField.getDouble();
                         xAxis.set(sim.Xmin, sim.Xmax);
+                        //Перестраиваем график с новым Xmin
                         sim.simulate(showingPlot);
                     }
                 });
 
             }
+            //Далее аналогично
             {
                 Label variable = new Label("Xmax: ");
                 scopeControls.add(variable, 2, 0);
@@ -58,6 +64,7 @@ public class ScopeControls {
             }
 
             {
+                //Изменение оси на логарифмическую
                 CheckBox logYAxis = new CheckBox("Log Y axis");
                 scopeControls.add(logYAxis, 1, 3);
                 logYAxis.setOnAction(e -> {
@@ -72,6 +79,7 @@ public class ScopeControls {
                 });
             }
             {
+                //Выпадающее меню с опциями
                 ChoiceBox<String> modeSelector = new ChoiceBox();
                 modeSelector.getItems().addAll("Volt-Ampere", "Signal response", "Temperature");
                 modeSelector.setValue("Volt-Ampere");
@@ -79,6 +87,7 @@ public class ScopeControls {
 
                 modeSelector.setOnAction(e -> {
                     if (modeSelector.getValue() == "Volt-Ampere") {
+                        //Устанавливаем параметры моделирования
                         sim.voltampere = true;
                         sim.signalresponse = false;
                         sim.simulate(showingPlot);

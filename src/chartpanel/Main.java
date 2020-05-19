@@ -22,10 +22,12 @@ public class Main extends Application {
         HBox scope = new HBox();
         scope.setSpacing(10);
 
+        //Две оси и график с этими осями
         DefaultNumericAxis xAxis = new DefaultNumericAxis();
         DefaultNumericAxis yAxis = new DefaultNumericAxis();
         XYChart plot = new XYChart(xAxis, yAxis);
 
+        //Добавляем плагины, чтобы можно было интерактивно взаимодействовать с графиком
         plot.getPlugins().add(new Zoomer());
         plot.getPlugins().add(new EditAxis());
         //plot.getPlugins().add(new EditDataSet());
@@ -33,32 +35,41 @@ public class Main extends Application {
         //plot.getPlugins().add(new UpdateAxisLabels());
 
 
+        //Таблица с полями для управления графиком
         GridPane scopeControls = new GridPane();
         scopeControls.setPadding(new Insets(10, 10, 10, 10));
         scopeControls.setVgap(5);
         scopeControls.setHgap(5);
 
+        //Таблица с полями для изменения параметров модели
         GridPane diodeControls = new GridPane();
         diodeControls.setPadding(new Insets(10, 10, 10, 10));
         diodeControls.setVgap(5);
         diodeControls.setHgap(5);
 
+        //Добавляем всё на HBox
         scope.getChildren().addAll(plot, scopeControls, diodeControls);
 
+        //Создаём симуляцию и запускаем первый раз
         Simulation sim = new Simulation();
         sim.simulate(plot);
 
+        //Чтобы график растягивался при масштабировании окна
         VBox.setVgrow(plot, Priority.ALWAYS);
         HBox.setHgrow(plot, Priority.ALWAYS);
 
+        //Добавляем поля для ввода
         SpiceControls spiceControls = new SpiceControls();
         spiceControls.AddControls(sim, plot, diodeControls);
 
+        //Добавляем поля для ввода
         ScopeControls scopControls = new ScopeControls();
         scopControls.AddControls(sim, plot, xAxis, yAxis, scopeControls);
 
+        //Отдаём заполненный HBox root
         root.getChildren().add(scope);
 
+        //Параметры окна
         PrimaryStage.setTitle("DiodeSim");
         PrimaryStage.setScene(new Scene(root, 1200, 800));
         PrimaryStage.setOnCloseRequest(evt -> System.exit(0));

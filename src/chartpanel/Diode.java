@@ -63,6 +63,7 @@ public class Diode {
     double RS_d = RS / (AREA * SCALE); //Geometry-adjusted series resistance
 
     void junctionCharge() {
+        // Вычисление заряда диодной структуры
         if (V_d < FC * VJ) {
             Q_d = TT * AREA * I_fwd + CJO_d * VJ * (1 - Math.pow((1 - (V_d / VJ)), 1 - M) / (1 - M));
         } else {
@@ -89,7 +90,7 @@ public class Diode {
     double CJO_d_T;
 
     void corrTemp() {
-        //Temperature Dependence
+        //Корректировка полученных значений согласно температурным зависимостям
         IS_d_T = IS_d * Math.pow((T / TMEAS), XTI / N) * Math.exp(((T / TMEAS) - 1) * (EG / (N * V_t))); //Relationship between the geometry-adjusted saturation current and the diode temperature
         I_SR_T = I_SR * Math.pow(T / TMEAS, XTI / NR) * Math.exp(((T / TMEAS) - 1) * (EG / (NR * V_t))); //Relationship between the recombination current and the diode temperature
         IKF_T = IKF * (1 + TIKF * (T - TMEAS)); //Relationship between the forward knee current and the diode temperature
@@ -103,7 +104,7 @@ public class Diode {
     }
 
     void calculate() {
-        //Current-Voltage Equations
+        //Вычисление токов диода
         I_rec = I_SR * Math.exp(V_d / (NR * V_t) - 1);
         I_nrm = I_S * Math.exp(V_d / (N * V_t) - 1);
         K_inj = Math.pow((IKF / (IKF + I_nrm)), 0.5);
@@ -115,6 +116,7 @@ public class Diode {
         I_d = AREA * (I_fwd - I_rev);
     }
 
+    //Вычисление тока при фиксированном значении напряжения на диоде
     private double doStep(double voltage) {
         V_d = voltage;
         calculate();
@@ -122,6 +124,7 @@ public class Diode {
         return I_d;
     }
 
+    //Получаем массив с значениями токов (responseValues[]) в зависимости от значений напряжений (signalValues[])
     double[] getResponse(double[] signalValues) {
         double[] responseValues = new double[signalValues.length];
         for (int i = 0; i < signalValues.length; ++i) {

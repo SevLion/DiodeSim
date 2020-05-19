@@ -20,9 +20,12 @@ public class Simulation {
 
     Diode diode = new Diode();
 
+    //Флаги для определения того, какой график строить
     boolean voltampere = true;
     boolean signalresponse = false;
 
+
+    //Вызывается снаружи для построения графика
     void simulate(XYChart chart) {
         if(voltampere) {
             Volt_Ampere(chart);
@@ -34,9 +37,11 @@ public class Simulation {
 
     void Transient(XYChart chart) {
 
+        //Два датасета для библиотеки, в которые нужно передать массивы с данными для отрисовки
         final DoubleDataSet signal1 = new DoubleDataSet("signal1");
         final DoubleDataSet response = new DoubleDataSet("response");
 
+        //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
         response.autoNotification().set(false);
         signal1.autoNotification().set(false);
 
@@ -45,50 +50,73 @@ public class Simulation {
         double[] rValues = new double[N_SAMPLES];
 
 
+        //В yValues1 записываем sin(x)
         Signal signal = new Signal();
         yValues1 = signal.sin(xValues, 1.5);
+
+        //Передаём yValues1 в качестве напряжения на диоде для моделирования тока
         rValues = diode.getResponse(yValues1);
 
+        //Отдаём в датасеты полученные массивы
         signal1.set(xValues, yValues1);
         response.set(xValues, rValues);
 
-
+        //Разрешаем перестроить график
         response.autoNotification().set(true);
         signal1.autoNotification().set(true);
 
+        //Очищаем график, чттобы не было старых кривых
         chart.getDatasets().clear();
+        //Передаём датасеты в график
         chart.getDatasets().addAll(signal1);
         chart.getDatasets().addAll(response);
+        //Названия осей
         chart.getYAxis().setName("U_d, В; I_d, А");
         chart.getXAxis().setName("t, с");
 
+        //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(response);
     }
 
     void Volt_Ampere(XYChart chart) {
+        //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
         final DoubleDataSet current_response = new DoubleDataSet("current_response");
+
+        //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
         current_response.autoNotification().set(false);
+
+        //Получаем значения напряжения для моделирования
         final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
+        //Передаём vin_values в качестве напряжения на диоде для моделирования тока
         double[] cout_values = new double[N_SAMPLES];
 
+        //Моделируем
         cout_values = diode.getResponse(vin_values);
+        //Передаём в датасет
         current_response.set(vin_values, cout_values);
 
+        //Разрешаем перестроить график
         current_response.autoNotification().set(true);
+
+        //Очищаем график, чттобы не было старых кривых
         chart.getDatasets().clear();
+        //Передаём датасеты в график
         chart.getDatasets().addAll(current_response);
+        //Названия осей
         chart.getYAxis().setName("I_d, А");
         chart.getXAxis().setName("V_d, В");
+        //Названия осей ??
         current_response.getAxisDescription(DIM_X).set("Voltage", "V_d");
         current_response.getAxisDescription(DIM_Y).set("Current", "I_d");
 
+        //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(current_response);
     }
 
 
-    private double[] getRange(final double Xmin, final double Xmax, final int N_SAMPLES) {
+    double[] getRange(final double Xmin, final double Xmax, final int N_SAMPLES) {
         double[] range = new double[N_SAMPLES];
         double inc = Math.abs((Xmax - Xmin) / N_SAMPLES);
         range[0] = Xmin;

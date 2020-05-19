@@ -8,15 +8,20 @@ public class SpiceControls {
 
     public void AddControls(Simulation sim, XYChart plot, GridPane diodeControls) {
         {//I_S Saturation current
+            //Слева в таблицу добавляем Label, справа - NumberField
             Label variable = new Label("IS: ");
             diodeControls.add(variable, 0, 0);
             NumberField varField = new NumberField();
             varField.setPromptText("Saturation current");
             diodeControls.add(varField, 1, 0);
 
+            //По прерыванию меняем значение I_S и перестраиваем график
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
                     sim.diode.I_S = varField.getDouble();
+                    //Попытка в многопоточность
+                    //SimulationThread simulationThread = new SimulationThread(sim, plot);
+                    //simulationThread.start();
                     sim.simulate(plot);
                 }
             });

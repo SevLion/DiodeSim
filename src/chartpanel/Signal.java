@@ -1,6 +1,8 @@
 package chartpanel;
 
 public class Signal {
+    //Возвращает массивы с различными сигналами
+    //Надо переписать
     double[] sin(double[] range, double U_max) {
         double[] vValues = new double[range.length];
         for (int i = 0; i < range.length; ++i) {
