@@ -4,7 +4,9 @@ import de.gsi.chart.XYChart;
 import de.gsi.chart.axes.spi.DefaultNumericAxis;
 import de.gsi.chart.plugins.DataPointTooltip;
 import de.gsi.chart.plugins.EditAxis;
+import de.gsi.chart.plugins.UpdateAxisLabels;
 import de.gsi.chart.plugins.Zoomer;
+import de.gsi.chart.ui.geometry.Side;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -24,8 +26,11 @@ public class Main extends Application {
 
         //Две оси и график с этими осями
         DefaultNumericAxis xAxis = new DefaultNumericAxis();
+        xAxis.setMinorTickCount(5);
         DefaultNumericAxis yAxis = new DefaultNumericAxis();
+        yAxis.setMinorTickCount(5);
         XYChart plot = new XYChart(xAxis, yAxis);
+        plot.setTitle("ВАХ");
 
         //Добавляем плагины, чтобы можно было интерактивно взаимодействовать с графиком
         plot.getPlugins().add(new Zoomer());

@@ -2,6 +2,7 @@ package chartpanel;
 
 import de.gsi.chart.XYChart;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 
 public class SpiceControls {
@@ -11,17 +12,16 @@ public class SpiceControls {
             //Слева в таблицу добавляем Label, справа - NumberField
             Label variable = new Label("IS: ");
             diodeControls.add(variable, 0, 0);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Saturation current");
+            NumberField varField = new NumberField(sim.diode.I_S);
+            Tooltip tooltip = new Tooltip("Saturation current");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 0);
 
             //По прерыванию меняем значение I_S и перестраиваем график
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
                     sim.diode.I_S = varField.getDouble();
-                    //Попытка в многопоточность
-                    //SimulationThread simulationThread = new SimulationThread(sim, plot);
-                    //simulationThread.start();
                     sim.simulate(plot);
                 }
             });
@@ -29,8 +29,10 @@ public class SpiceControls {
         {//N Emission coefficient
             Label variable = new Label("N: ");
             diodeControls.add(variable, 0, 1);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Emission coefficient");
+            NumberField varField = new NumberField(sim.diode.N);
+            Tooltip tooltip = new Tooltip("Emission coefficient");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 1);
 
             varField.setOnAction(e -> {
@@ -43,8 +45,10 @@ public class SpiceControls {
         {//Rs Ohmic resistance
             Label variable = new Label("Rs: ");
             diodeControls.add(variable, 0, 2);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Ohmic resistance");
+            NumberField varField = new NumberField(sim.diode.RS);
+            Tooltip tooltip = new Tooltip("Ohmic resistance");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 2);
 
             varField.setOnAction(e -> {
@@ -57,8 +61,10 @@ public class SpiceControls {
         {//Ikf Forward knee current
             Label variable = new Label("Ikf: ");
             diodeControls.add(variable, 0, 3);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Forward knee current");
+            NumberField varField = new NumberField(sim.diode.IKF);
+            Tooltip tooltip = new Tooltip("Forward knee current");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 3);
 
             varField.setOnAction(e -> {
@@ -71,8 +77,10 @@ public class SpiceControls {
         {//Xti Forward knee current
             Label variable = new Label("Xti: ");
             diodeControls.add(variable, 0, 4);
-            NumberField varField = new NumberField();
-            varField.setPromptText("IS temperature exponent");
+            NumberField varField = new NumberField(sim.diode.XTI);
+            Tooltip tooltip = new Tooltip("IS temperature exponent");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 4);
 
             varField.setOnAction(e -> {
@@ -85,8 +93,10 @@ public class SpiceControls {
         {//Eg Activation energy
             Label variable = new Label("Eg: ");
             diodeControls.add(variable, 0, 5);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Activation energy");
+            NumberField varField = new NumberField(sim.diode.EG);
+            Tooltip tooltip = new Tooltip("Activation energy");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 5);
 
             varField.setOnAction(e -> {
@@ -99,13 +109,15 @@ public class SpiceControls {
         {//Cjo Zero-bias junction capacitance
             Label variable = new Label("Cjo: ");
             diodeControls.add(variable, 0, 6);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Zero-bias junction cap");
+            NumberField varField = new NumberField(sim.diode.CJO);
+            Tooltip tooltip = new Tooltip("Zero-bias junction capacitance");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 6);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
-                    sim.diode.EG = varField.getDouble();
+                    sim.diode.CJO = varField.getDouble();
                     sim.simulate(plot);
                 }
             });
@@ -113,8 +125,10 @@ public class SpiceControls {
         {//M Grading coefficient
             Label variable = new Label("M: ");
             diodeControls.add(variable, 0, 7);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Grading coefficient");
+            NumberField varField = new NumberField(sim.diode.M);
+            Tooltip tooltip = new Tooltip("Grading coefficient");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 7);
 
             varField.setOnAction(e -> {
@@ -127,8 +141,10 @@ public class SpiceControls {
         {//Vj Junction potential
             Label variable = new Label("Vj: ");
             diodeControls.add(variable, 0, 8);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Junction potential");
+            NumberField varField = new NumberField(sim.diode.VJ);
+            Tooltip tooltip = new Tooltip("Junction potential");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 8);
 
             varField.setOnAction(e -> {
@@ -141,8 +157,10 @@ public class SpiceControls {
         {//Fc Forward bias depletion capacitance coefficient
             Label variable = new Label("Fc: ");
             diodeControls.add(variable, 0, 9);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Forward bias depletion capacitance coefficient");
+            NumberField varField = new NumberField(sim.diode.FC);
+            Tooltip tooltip = new Tooltip("Forward bias depletion capacitance coefficient");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 9);
 
             varField.setOnAction(e -> {
@@ -155,8 +173,10 @@ public class SpiceControls {
         {//Isr Forward bias depletion capacitance coefficient
             Label variable = new Label("Isr: ");
             diodeControls.add(variable, 0, 10);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Recombination current");
+            NumberField varField = new NumberField(sim.diode.I_SR);
+            Tooltip tooltip = new Tooltip("Recombination current");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 10);
 
             varField.setOnAction(e -> {
@@ -169,8 +189,10 @@ public class SpiceControls {
         {//Nr Reverse emission coefficient
             Label variable = new Label("Nr: ");
             diodeControls.add(variable, 0, 11);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Reverse emission coefficient");
+            NumberField varField = new NumberField(sim.diode.NR);
+            Tooltip tooltip = new Tooltip("Reverse emission coefficient");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 11);
 
             varField.setOnAction(e -> {
@@ -183,8 +205,10 @@ public class SpiceControls {
         {//Bv Reverse breakdown voltage
             Label variable = new Label("Bv: ");
             diodeControls.add(variable, 0, 12);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Reverse breakdown voltage");
+            NumberField varField = new NumberField(sim.diode.BV);
+            Tooltip tooltip = new Tooltip("Reverse breakdown voltage");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 12);
 
             varField.setOnAction(e -> {
@@ -197,8 +221,10 @@ public class SpiceControls {
         {//Ibv Reverse breakdown current
             Label variable = new Label("Ibv: ");
             diodeControls.add(variable, 0, 13);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Reverse breakdown current");
+            NumberField varField = new NumberField(sim.diode.IBV);
+            Tooltip tooltip = new Tooltip("Reverse breakdown current");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 13);
 
             varField.setOnAction(e -> {
@@ -211,8 +237,10 @@ public class SpiceControls {
         {//Tt Transit time
             Label variable = new Label("Tt: ");
             diodeControls.add(variable, 0, 14);
-            NumberField varField = new NumberField();
-            varField.setPromptText("Transit time");
+            NumberField varField = new NumberField(sim.diode.TT);
+            Tooltip tooltip = new Tooltip("Transit time");
+            varField.setTooltip(tooltip);
+            varField.setEditable(true);
             diodeControls.add(varField, 1, 14);
 
             varField.setOnAction(e -> {

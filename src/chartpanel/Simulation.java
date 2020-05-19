@@ -19,10 +19,13 @@ public class Simulation {
     double Xmax = 1.0;
 
     Diode diode = new Diode();
+    Signal signal = new Signal();
 
     //Флаги для определения того, какой график строить
     boolean voltampere = true;
     boolean signalresponse = false;
+    boolean temperature = false;
+    boolean junctioncharge = false;
 
 
     //Вызывается снаружи для построения графика
@@ -32,6 +35,12 @@ public class Simulation {
         }
         if(signalresponse) {
             Transient(chart);
+        }
+        if(junctioncharge) {
+            JunctionCharge(chart);
+        }
+        if(temperature) {
+            Temperature(chart);
         }
     }
 
@@ -51,8 +60,7 @@ public class Simulation {
 
 
         //В yValues1 записываем sin(x)
-        Signal signal = new Signal();
-        yValues1 = signal.sin(xValues, 1.5);
+        yValues1 = signal.getSignal(xValues);
 
         //Передаём yValues1 в качестве напряжения на диоде для моделирования тока
         rValues = diode.getResponse(yValues1);
@@ -113,6 +121,94 @@ public class Simulation {
         //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(current_response);
+    }
+
+    void JunctionCharge(XYChart chart) {
+        //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
+        final DoubleDataSet charge = new DoubleDataSet("charge");
+
+        //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
+        charge.autoNotification().set(false);
+
+        //Получаем значения напряжения для моделирования
+        final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
+        //Передаём vin_values в качестве напряжения на диоде для моделирования тока
+        double[] charge_values = new double[N_SAMPLES];
+
+        //Моделируем
+        charge_values = diode.getResponseQ(vin_values);
+        //Передаём в датасет
+        charge.set(vin_values, charge_values);
+
+        //Разрешаем перестроить график
+        charge.autoNotification().set(true);
+
+        //Очищаем график, чттобы не было старых кривых
+        chart.getDatasets().clear();
+        //Передаём датасеты в график
+        chart.getDatasets().addAll(charge);
+        //Названия осей
+        chart.getYAxis().setName("Q, Кл");
+        chart.getXAxis().setName("V_d, В");
+        //Названия осей ??
+        charge.getAxisDescription(DIM_X).set("Voltage", "V_d");
+        charge.getAxisDescription(DIM_Y).set("Charge", "Q_d");
+
+        //??
+        Renderer renderer1 = new ErrorDataSetRenderer();
+        renderer1.getDatasets().add(charge);
+    }
+
+    void Temperature(XYChart chart) {
+        //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
+        final DoubleDataSet current_response1 = new DoubleDataSet("current_response at 17C");
+        final DoubleDataSet current_response2 = new DoubleDataSet("current_response at 27C");
+        final DoubleDataSet current_response3 = new DoubleDataSet("current_response at 37C");
+
+        //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
+        current_response1.autoNotification().set(false);
+        current_response2.autoNotification().set(false);
+        current_response3.autoNotification().set(false);
+
+        //Получаем значения напряжения для моделирования
+        final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
+        //Передаём vin_values в качестве напряжения на диоде для моделирования тока
+        double[] cout_values = new double[N_SAMPLES];
+
+        double T = diode.T;
+
+        //Моделируем
+        diode.T = 290.15;
+        cout_values = diode.getResponse(vin_values);
+        current_response1.set(vin_values, cout_values);
+        diode.T = 300.15;
+        cout_values = diode.getResponse(vin_values);
+        current_response2.set(vin_values, cout_values);
+        diode.T = 310.15;
+        cout_values = diode.getResponse(vin_values);
+        current_response3.set(vin_values, cout_values);
+
+        //Разрешаем перестроить график
+        current_response1.autoNotification().set(true);
+        current_response2.autoNotification().set(true);
+        current_response3.autoNotification().set(true);
+
+        //Очищаем график, чттобы не было старых кривых
+        chart.getDatasets().clear();
+        //Передаём датасеты в график
+        chart.getDatasets().addAll(current_response1, current_response2, current_response3);
+        //Названия осей
+        chart.getYAxis().setName("I_d, А");
+        chart.getXAxis().setName("V_d, В");
+        //Названия осей ??
+        //current_response1.getAxisDescription(DIM_X).set("Voltage", "V_d");
+        //current_response1.getAxisDescription(DIM_Y).set("Current", "I_d");
+
+        //??
+        Renderer renderer1 = new ErrorDataSetRenderer();
+        renderer1.getDatasets().addAll(current_response1, current_response2, current_response3);
+
+        diode.T = T;
     }
 
 

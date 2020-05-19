@@ -3,6 +3,17 @@ package chartpanel;
 public class Signal {
     //Возвращает массивы с различными сигналами
     //Надо переписать
+    boolean sin = true;
+    boolean triangle = false;
+    boolean sawtooth = false;
+
+    double[] getSignal(double[] range) {
+        if(sin) {return sin(range, 0.9);}
+        if(sawtooth) {return sawtooth(range, 0.9, 1);}
+        if(triangle) {return triangle(range, 0.9, 1);}
+        return sin(range, 0.9);
+    }
+
     double[] sin(double[] range, double U_max) {
         double[] vValues = new double[range.length];
         for (int i = 0; i < range.length; ++i) {
