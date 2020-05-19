@@ -8,10 +8,10 @@ public class IntNumberField extends TextField {
     @Override
     public void replaceText(int start, int end, String text) {
         String oldValue = getText();
-        if(validate(text)) {
+        if (validate(text)) {
             super.replaceText(start, end, text);
             String newText = super.getText();
-            if(!validate(newText)){
+            if (!validate(newText)) {
                 super.setText(oldValue);
             }
         }
