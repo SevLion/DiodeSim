@@ -12,12 +12,12 @@ public class ScopeControls {
     public void AddControls(Simulation sim, XYChart showingPlot, DefaultNumericAxis xAxis, DefaultNumericAxis yAxis, GridPane scopeControls) {
         //Добавление полей
         {//Scope settings
+            Label xmin = new Label("V_d min: ");
             {
                 //Слева в таблицу добавляем Label, справа - NumberField
-                Label variable = new Label("Xmin: ");
-                scopeControls.add(variable, 0, 0);
+                scopeControls.add(xmin, 0, 0);
                 NumberField varField = new NumberField(sim.Xmin);
-                Tooltip tooltip = new Tooltip("Xmin");
+                Tooltip tooltip = new Tooltip("V_d max");
                 varField.setTooltip(tooltip);
                 varField.setEditable(true);
                 scopeControls.add(varField, 1, 0);
@@ -35,9 +35,9 @@ public class ScopeControls {
 
             }
             //Далее аналогично
+            Label xmax = new Label("V_d max: ");
             {
-                Label variable = new Label("Xmax: ");
-                scopeControls.add(variable, 2, 0);
+                scopeControls.add(xmax, 2, 0);
                 NumberField varField = new NumberField(sim.Xmax);
                 Tooltip tooltip = new Tooltip("Xmax");
                 varField.setTooltip(tooltip);
@@ -126,7 +126,7 @@ public class ScopeControls {
                 });
             }
 
-            Label t3label = new Label("T2: ");
+            Label t3label = new Label("T3: ");
             NumberField t3varField = new NumberField(sim.T3);
             {
                 scopeControls.add(t3label, 0, 5);
@@ -150,13 +150,15 @@ public class ScopeControls {
             {
                 //Выпадающее меню с опциями
                 ChoiceBox<String> modeSelector = new ChoiceBox();
-                modeSelector.getItems().addAll("Volt-Ampere", "Signal response", "Temperature", "Junction charge");
+                modeSelector.getItems().addAll("Volt-Ampere", "Signal response", "Temperature", "Junction charge"/*, "Junction voltage (T)"*/);
                 modeSelector.setValue("Volt-Ampere");
                 scopeControls.add(modeSelector, 1, 2);
 
                 modeSelector.setOnAction(e -> {
                     if (modeSelector.getValue() == "Volt-Ampere") {
                         //Устанавливаем параметры моделирования
+                        xmin.setText("V_d min: ");
+                        xmax.setText("V_d max: ");
                         sim.diode.temperature = false;
                         sim.voltampere = true;
                         sim.signalresponse = false;
@@ -174,6 +176,8 @@ public class ScopeControls {
 
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Signal response") {
+                        xmin.setText("t min: ");
+                        xmax.setText("t max: ");
                         sim.diode.temperature = false;
                         sim.voltampere = false;
                         sim.signalresponse = true;
@@ -191,6 +195,8 @@ public class ScopeControls {
 
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Temperature") {
+                        xmin.setText("V_d min: ");
+                        xmax.setText("V_d max: ");
                         sim.diode.temperature = true;
                         sim.voltampere = false;
                         sim.signalresponse = false;
@@ -208,6 +214,8 @@ public class ScopeControls {
 
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Junction charge") {
+                        xmin.setText("V_d min: ");
+                        xmax.setText("V_d max: ");
                         sim.diode.temperature = false;
                         sim.voltampere = false;
                         sim.signalresponse = false;
@@ -224,7 +232,26 @@ public class ScopeControls {
                         t3varField.setVisible(false);
 
                         sim.simulate(showingPlot);
+                    } /*else if (modeSelector.getValue() == "Junction voltage (T)") {
+                        sim.diode.temperature = false;
+                        sim.voltampere = false;
+                        sim.signalresponse = false;
+                        sim.junctioncharge = false;
+                        sim.temperature = false;
+                        sim.junctionvoltage = true;
+                        signalSelector.setVisible(false);
+                        logYAxis.setVisible(true);
+
+                        t1label.setVisible(false);
+                        t1varField.setVisible(false);
+                        t2label.setVisible(false);
+                        t2varField.setVisible(false);
+                        t3label.setVisible(false);
+                        t3varField.setVisible(false);
+
+                        sim.simulate(showingPlot);
                     }
+                    */
                 });
             }
 

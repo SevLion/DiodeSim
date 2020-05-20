@@ -100,7 +100,7 @@ public class Diode {
         //IS_d_T = IS_d * Math.pow((T / TMEAS), XTI / N) * Math.exp(((T / TMEAS) - 1) * (EG / (N * V_t))); //Relationship between the geometry-adjusted saturation current and the diode temperature
         //I_SR_T = I_SR * Math.pow(T / TMEAS, XTI / NR) * Math.exp(((T / TMEAS) - 1) * (EG / (NR * V_t))); //Relationship between the recombination current and the diode temperature
         //IKF_T = IKF * (1 + TIKF * (T - TMEAS)); //Relationship between the forward knee current and the diode temperature
-        BV_T = BV * (1 + TBV1 * (T - TMEAS) + TBV2 * Math.pow(T - TMEAS, 2)); //Relationship between the breakdown voltage and the diode temperature
+        //BV_T = BV * (1 + TBV1 * (T - TMEAS) + TBV2 * Math.pow(T - TMEAS, 2)); //Relationship between the breakdown voltage and the diode temperature
         //RS_T = RS * (1 + TRS1 * (T - TMEAS) + TRS2 * Math.pow(T - TMEAS, 2)); //Relationship between the ohmic resistance and the diode temperature
         double EG_TMEAS = 1.16 - (7.02 * Math.E - 4 * Math.pow(TMEAS, 2)) / (TMEAS + 1108); //Activation energy for the temperature at which the diode parameters were measured
         double EG_T = 1.16 - (7.02 * Math.E - 4 * Math.pow(T, 2)) / (T + 1108); //Activation energy for the diode temperature
@@ -157,6 +157,12 @@ public class Diode {
         return Q_d;
     }
 
+    private double doStepVJT(double temperature) {
+        T = temperature;
+        calculate();
+        return VJ_T;
+    }
+
     //Получаем массив с значениями токов (responseValues[]) в зависимости от значений напряжений (signalValues[])
     double[] getResponse(double[] signalValues) {
         double[] responseValues = new double[signalValues.length];
@@ -171,6 +177,16 @@ public class Diode {
         for (int i = 0; i < signalValues.length; ++i) {
             responseValues[i] = doStepQ(signalValues[i]);
         }
+        return responseValues;
+    }
+
+    double[] getResponseVJT(double[] temperatureValues) {
+        double[] responseValues = new double[temperatureValues.length];
+        double oldTemperature = T;
+        for (int i = 0; i < temperatureValues.length; ++i) {
+            responseValues[i] = doStepVJT(temperatureValues[i]);
+        }
+        T = oldTemperature;
         return responseValues;
     }
 }
