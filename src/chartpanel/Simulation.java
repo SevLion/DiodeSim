@@ -55,7 +55,6 @@ public class Simulation {
     }
 
     void Transient(XYChart chart) {
-
         //Два датасета для библиотеки, в которые нужно передать массивы с данными для отрисовки
         final DoubleDataSet signal1 = new DoubleDataSet("signal1");
         final DoubleDataSet response = new DoubleDataSet("response");
@@ -64,20 +63,32 @@ public class Simulation {
         response.autoNotification().set(false);
         signal1.autoNotification().set(false);
 
-        final double[] xValues = getRange(Xmin, Xmax, N_SAMPLES);
-        double[] yValues1 = new double[N_SAMPLES];
-        double[] rValues = new double[N_SAMPLES];
+        Runnable task = () -> {
+            final double[] xValues = getRange(Xmin, Xmax, N_SAMPLES);
+            double[] yValues1 = new double[N_SAMPLES];
+            double[] rValues = new double[N_SAMPLES];
 
 
-        //В yValues1 записываем sin(x)
-        yValues1 = signal.getSignal(xValues);
+            //В yValues1 записываем sin(x)
+            yValues1 = signal.getSignal(xValues);
 
-        //Передаём yValues1 в качестве напряжения на диоде для моделирования тока
-        rValues = diode.getResponse(yValues1);
+            //Передаём yValues1 в качестве напряжения на диоде для моделирования тока
+            rValues = diode.getResponse(yValues1);
 
-        //Отдаём в датасеты полученные массивы
-        signal1.set(xValues, yValues1);
-        response.set(xValues, rValues);
+            //Отдаём в датасеты полученные массивы
+            signal1.set(xValues, yValues1);
+            response.set(xValues, rValues);
+
+        };
+        Thread taskThread = new Thread(task);
+        taskThread.start();
+
+        try {
+            taskThread.join();
+        } catch(InterruptedException e) {
+
+        }
+
 
         //Разрешаем перестроить график
         response.autoNotification().set(true);
@@ -102,6 +113,7 @@ public class Simulation {
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(response);
         chart.setTitle("Signal response");
+
     }
 
     void Volt_Ampere(XYChart chart) {
@@ -111,6 +123,10 @@ public class Simulation {
         //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
         current_response.autoNotification().set(false);
 
+
+
+
+        Runnable task = () -> {
         //Получаем значения напряжения для моделирования
         final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
         //Передаём vin_values в качестве напряжения на диоде для моделирования тока
@@ -120,6 +136,16 @@ public class Simulation {
         cout_values = diode.getResponse(vin_values);
         //Передаём в датасет
         current_response.set(vin_values, cout_values);
+        };
+        Thread taskThread = new Thread(task);
+        taskThread.start();
+        try {
+            taskThread.join();
+        } catch(InterruptedException e) {
+
+        }
+
+
 
         //Разрешаем перестроить график
         current_response.autoNotification().set(true);
@@ -152,15 +178,29 @@ public class Simulation {
         //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
         charge.autoNotification().set(false);
 
-        //Получаем значения напряжения для моделирования
-        final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
-        //Передаём vin_values в качестве напряжения на диоде для моделирования тока
-        double[] charge_values = new double[N_SAMPLES];
 
-        //Моделируем
-        charge_values = diode.getResponseQ(vin_values);
-        //Передаём в датасет
-        charge.set(vin_values, charge_values);
+
+
+        Runnable task = () -> {
+            //Получаем значения напряжения для моделирования
+            final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
+            //Передаём vin_values в качестве напряжения на диоде для моделирования тока
+            double[] charge_values = new double[N_SAMPLES];
+
+            //Моделируем
+            charge_values = diode.getResponseQ(vin_values);
+            //Передаём в датасет
+            charge.set(vin_values, charge_values);
+        };
+        Thread taskThread = new Thread(task);
+        taskThread.start();
+        try {
+            taskThread.join();
+        } catch(InterruptedException e) {
+
+        }
+
+
 
         //Разрешаем перестроить график
         charge.autoNotification().set(true);
@@ -198,23 +238,36 @@ public class Simulation {
         current_response2.autoNotification().set(false);
         current_response3.autoNotification().set(false);
 
-        //Получаем значения напряжения для моделирования
-        final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
-        //Передаём vin_values в качестве напряжения на диоде для моделирования тока
-        double[] cout_values = new double[N_SAMPLES];
 
-        double T = diode.T;
+        Runnable task = () -> {
+            //Получаем значения напряжения для моделирования
+            final double[] vin_values = getRange(Xmin, Xmax, N_SAMPLES);
+            //Передаём vin_values в качестве напряжения на диоде для моделирования тока
+            double[] cout_values = new double[N_SAMPLES];
 
-        //Моделируем
-        diode.T = T1;
-        cout_values = diode.getResponse(vin_values);
-        current_response1.set(vin_values, cout_values);
-        diode.T = T2;
-        cout_values = diode.getResponse(vin_values);
-        current_response2.set(vin_values, cout_values);
-        diode.T = T3;
-        cout_values = diode.getResponse(vin_values);
-        current_response3.set(vin_values, cout_values);
+            double T = diode.T;
+
+            //Моделируем
+            diode.T = T1;
+            cout_values = diode.getResponse(vin_values);
+            current_response1.set(vin_values, cout_values);
+            diode.T = T2;
+            cout_values = diode.getResponse(vin_values);
+            current_response2.set(vin_values, cout_values);
+            diode.T = T3;
+            cout_values = diode.getResponse(vin_values);
+            current_response3.set(vin_values, cout_values);
+            diode.T = T;
+        };
+        Thread taskThread = new Thread(task);
+        taskThread.start();
+        try {
+            taskThread.join();
+        } catch(InterruptedException e) {
+
+        }
+
+
 
         //Разрешаем перестроить график
         current_response1.autoNotification().set(true);
@@ -233,7 +286,6 @@ public class Simulation {
         //current_response1.getAxisDescription(DIM_Y).set("Current", "I_d");
 
 
-        diode.T = T;
         chart.setTitle("Volt-Ampere temperature");
         chart.updateAxisRange();
         //chart.getYAxis().setAutoRanging(true);
