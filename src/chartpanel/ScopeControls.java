@@ -14,7 +14,7 @@ public class ScopeControls {
         {//Scope settings
             {
                 //Слева в таблицу добавляем Label, справа - NumberField
-                Label variable = new Label("min: ");
+                Label variable = new Label("Xmin: ");
                 scopeControls.add(variable, 0, 0);
                 NumberField varField = new NumberField(sim.Xmin);
                 Tooltip tooltip = new Tooltip("Xmin");
@@ -73,7 +73,7 @@ public class ScopeControls {
             CheckBox logYAxis = new CheckBox("Log Y axis");
             {
                 //Изменение оси на логарифмическую
-                scopeControls.add(logYAxis, 1, 4);
+                scopeControls.add(logYAxis, 3, 2);
                 logYAxis.setOnAction(e -> {
                     if (logYAxis.isSelected()) {
                         yAxis.setLogAxis(true);
@@ -85,6 +85,67 @@ public class ScopeControls {
                     }
                 });
             }
+
+            Label t1label = new Label("T1: ");
+            NumberField t1varField = new NumberField(sim.T1);
+            {
+                scopeControls.add(t1label, 0, 3);
+                t1label.setVisible(false);
+                t1varField.setVisible(false);
+                Tooltip tooltip = new Tooltip("Temperature");
+                t1varField.setTooltip(tooltip);
+                t1varField.setEditable(true);
+                scopeControls.add(t1varField, 1, 3);
+
+                t1varField.setOnAction(e -> {
+                    if ((t1varField.getText() != null && !t1varField.getText().isEmpty())) {
+                        sim.T1 = t1varField.getDouble();
+                        xAxis.set(sim.Xmin, sim.Xmax);
+                        sim.simulate(showingPlot);
+                    }
+                });
+            }
+
+            Label t2label = new Label("T2: ");
+            NumberField t2varField = new NumberField(sim.T2);
+            {
+                scopeControls.add(t2label, 0, 4);
+                t2label.setVisible(false);
+                t2varField.setVisible(false);
+                Tooltip tooltip = new Tooltip("Temperature");
+                t2varField.setTooltip(tooltip);
+                t2varField.setEditable(true);
+                scopeControls.add(t2varField, 1, 4);
+
+                t2varField.setOnAction(e -> {
+                    if ((t2varField.getText() != null && !t2varField.getText().isEmpty())) {
+                        sim.T2 = t2varField.getDouble();
+                        xAxis.set(sim.Xmin, sim.Xmax);
+                        sim.simulate(showingPlot);
+                    }
+                });
+            }
+
+            Label t3label = new Label("T2: ");
+            NumberField t3varField = new NumberField(sim.T3);
+            {
+                scopeControls.add(t3label, 0, 5);
+                t3label.setVisible(false);
+                t3varField.setVisible(false);
+                Tooltip tooltip = new Tooltip("Temperature");
+                t3varField.setTooltip(tooltip);
+                t3varField.setEditable(true);
+                scopeControls.add(t3varField, 1, 5);
+
+                t3varField.setOnAction(e -> {
+                    if ((t3varField.getText() != null && !t3varField.getText().isEmpty())) {
+                        sim.T3 = t3varField.getDouble();
+                        xAxis.set(sim.Xmin, sim.Xmax);
+                        sim.simulate(showingPlot);
+                    }
+                });
+            }
+
             ChoiceBox<String> signalSelector = new ChoiceBox();
             {
                 //Выпадающее меню с опциями
@@ -103,6 +164,14 @@ public class ScopeControls {
                         sim.temperature = false;
                         signalSelector.setVisible(false);
                         logYAxis.setVisible(true);
+
+                        t1label.setVisible(false);
+                        t1varField.setVisible(false);
+                        t2label.setVisible(false);
+                        t2varField.setVisible(false);
+                        t3label.setVisible(false);
+                        t3varField.setVisible(false);
+
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Signal response") {
                         sim.diode.temperature = false;
@@ -112,6 +181,14 @@ public class ScopeControls {
                         sim.temperature = false;
                         signalSelector.setVisible(true);
                         logYAxis.setVisible(false);
+
+                        t1label.setVisible(false);
+                        t1varField.setVisible(false);
+                        t2label.setVisible(false);
+                        t2varField.setVisible(false);
+                        t3label.setVisible(false);
+                        t3varField.setVisible(false);
+
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Temperature") {
                         sim.diode.temperature = true;
@@ -121,6 +198,14 @@ public class ScopeControls {
                         sim.temperature = true;
                         signalSelector.setVisible(false);
                         logYAxis.setVisible(true);
+
+                        t1label.setVisible(true);
+                        t1varField.setVisible(true);
+                        t2label.setVisible(true);
+                        t2varField.setVisible(true);
+                        t3label.setVisible(true);
+                        t3varField.setVisible(true);
+
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Junction charge") {
                         sim.diode.temperature = false;
@@ -130,6 +215,14 @@ public class ScopeControls {
                         sim.temperature = false;
                         signalSelector.setVisible(false);
                         logYAxis.setVisible(true);
+
+                        t1label.setVisible(false);
+                        t1varField.setVisible(false);
+                        t2label.setVisible(false);
+                        t2varField.setVisible(false);
+                        t3label.setVisible(false);
+                        t3varField.setVisible(false);
+
                         sim.simulate(showingPlot);
                     }
                 });

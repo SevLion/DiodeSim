@@ -21,18 +21,18 @@ public class Diode {
     double V_t = (N * k * T) / q; //Thermal Voltage
 
     double I_S = 2.2e-9; //Saturation current
-    double I_SR = 7.832e-9; //Recombination current
-    double IKF = 8.512e-3; //Forward knee current
+    //double I_SR = 7.832e-9; //Recombination current
+    //double IKF = 8.512e-3; //Forward knee current
     double TIKF = 0; //Linear IKF temperature coefficient
     double VJ = 0.5; //Junction potential
-    double NR = 2; //Reverse emission coefficient
+    //double NR = 2; //Reverse emission coefficient
     double NBV = 1; //Reverse breakdown emission coefficient
     double NBVL = 1; //Low-level reverse breakdown ideality factor
     double M = 88.82e-3; //Grading coefficient
     double BV = 75; //Reverse breakdown voltage
     double IBV = 5e-6; //Reverse breakdown current
     double IBVL = 0; //Low-level reverse breakdown knee current
-    double RS = 0.5927; //Ohmic resistance
+    //double RS = 0.5927; //Ohmic resistance
 
     double I_d; //Diode current
     double V_d; //Diode voltage
@@ -52,7 +52,7 @@ public class Diode {
     double CJO_d = CJO * AREA * SCALE; //Geometry-adjusted zero-bias junction capacitance
     double IBV_d = IBV * AREA * SCALE; //Geometry-adjusted reverse breakdown current
     double IS_d = I_S * AREA * SCALE; //Geometry-adjusted saturation current
-    double RS_d = RS / (AREA * SCALE); //Geometry-adjusted series resistance
+    //double RS_d = RS / (AREA * SCALE); //Geometry-adjusted series resistance
 
     void junctionCharge() {
         F1 = (1 - Math.pow(1 - FC, 1 - M)) * (VJ / (1 - M));
@@ -88,10 +88,11 @@ public class Diode {
         CJO_d = CJO * AREA * SCALE; //Geometry-adjusted zero-bias junction capacitance
         IBV_d = IBV * AREA * SCALE; //Geometry-adjusted reverse breakdown current
         IS_d = I_S * AREA * SCALE; //Geometry-adjusted saturation current
-        RS_d = RS / (AREA * SCALE); //Geometry-adjusted series resistance
+        //RS_d = RS / (AREA * SCALE); //Geometry-adjusted series resistance
     }
 
     void temperatureDependene() {
+        V_t = (N * k * T) / q;
         IS_d_T = IS_d * Math.pow((T / TMEAS), XTI / N) * Math.exp(((T / TMEAS) - 1) * (EG / (V_t)));
 
 
@@ -113,7 +114,6 @@ public class Diode {
         if(!temperature) {
             if (V_d > 80 * V_t) {
                 I_d = IS_d * ((V_d / V_t - 79) * Math.exp(80) - 1) + V_d * GMIN;
-                System.out.println("V_d > 80 * V_t");
             } else if (V_d >= -3 * V_t) {
                 I_d = IS_d * (Math.exp(V_d / V_t) - 1) + V_d * GMIN;
             } else if (V_d >= -BV) {

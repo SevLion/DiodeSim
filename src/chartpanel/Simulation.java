@@ -18,6 +18,10 @@ public class Simulation {
     double Xmin = 0.2;
     double Xmax = 1.0;
 
+    double T1 = 290.15;
+    double T2 = 300.15;
+    double T3 = 310.15;
+
     Diode diode = new Diode();
     Signal signal = new Signal();
 
@@ -185,9 +189,9 @@ public class Simulation {
 
     void Temperature(XYChart chart) {
         //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
-        final DoubleDataSet current_response1 = new DoubleDataSet("current_response at 17C");
-        final DoubleDataSet current_response2 = new DoubleDataSet("current_response at 27C");
-        final DoubleDataSet current_response3 = new DoubleDataSet("current_response at 37C");
+        final DoubleDataSet current_response1 = new DoubleDataSet("current_response at " + T1 + "K");
+        final DoubleDataSet current_response2 = new DoubleDataSet("current_response at " + T2 + "K");
+        final DoubleDataSet current_response3 = new DoubleDataSet("current_response at " + T3 + "K");
 
         //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
         current_response1.autoNotification().set(false);
@@ -202,13 +206,13 @@ public class Simulation {
         double T = diode.T;
 
         //Моделируем
-        diode.T = 290.15;
+        diode.T = T1;
         cout_values = diode.getResponse(vin_values);
         current_response1.set(vin_values, cout_values);
-        diode.T = 300.15;
+        diode.T = T2;
         cout_values = diode.getResponse(vin_values);
         current_response2.set(vin_values, cout_values);
-        diode.T = 310.15;
+        diode.T = T3;
         cout_values = diode.getResponse(vin_values);
         current_response3.set(vin_values, cout_values);
 

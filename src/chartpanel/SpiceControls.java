@@ -42,6 +42,7 @@ public class SpiceControls {
                 }
             });
         }
+        /*
         {//Rs Ohmic resistance
             Label variable = new Label("Rs: ");
             diodeControls.add(variable, 0, 2);
@@ -58,6 +59,8 @@ public class SpiceControls {
                 }
             });
         }
+        */
+        /*
         {//Ikf Forward knee current
             Label variable = new Label("Ikf: ");
             diodeControls.add(variable, 0, 3);
@@ -74,14 +77,15 @@ public class SpiceControls {
                 }
             });
         }
+        */
         {//Xti Forward knee current
             Label variable = new Label("Xti: ");
-            diodeControls.add(variable, 0, 4);
+            diodeControls.add(variable, 0, 2);
             NumberField varField = new NumberField(sim.diode.XTI);
             Tooltip tooltip = new Tooltip("IS temperature exponent");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 4);
+            diodeControls.add(varField, 1, 2);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -92,12 +96,12 @@ public class SpiceControls {
         }
         {//Eg Activation energy
             Label variable = new Label("Eg: ");
-            diodeControls.add(variable, 0, 5);
+            diodeControls.add(variable, 0, 3);
             NumberField varField = new NumberField(sim.diode.EG);
             Tooltip tooltip = new Tooltip("Activation energy");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 5);
+            diodeControls.add(varField, 1, 3);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -108,12 +112,12 @@ public class SpiceControls {
         }
         {//Cjo Zero-bias junction capacitance
             Label variable = new Label("Cjo: ");
-            diodeControls.add(variable, 0, 6);
+            diodeControls.add(variable, 0, 4);
             NumberField varField = new NumberField(sim.diode.CJO);
             Tooltip tooltip = new Tooltip("Zero-bias junction capacitance");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 6);
+            diodeControls.add(varField, 1, 4);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -124,12 +128,12 @@ public class SpiceControls {
         }
         {//M Grading coefficient
             Label variable = new Label("M: ");
-            diodeControls.add(variable, 0, 7);
+            diodeControls.add(variable, 0, 5);
             NumberField varField = new NumberField(sim.diode.M);
             Tooltip tooltip = new Tooltip("Grading coefficient");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 7);
+            diodeControls.add(varField, 1, 5);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -140,12 +144,12 @@ public class SpiceControls {
         }
         {//Vj Junction potential
             Label variable = new Label("Vj: ");
-            diodeControls.add(variable, 0, 8);
+            diodeControls.add(variable, 0, 6);
             NumberField varField = new NumberField(sim.diode.VJ);
             Tooltip tooltip = new Tooltip("Junction potential");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 8);
+            diodeControls.add(varField, 1, 6);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -156,12 +160,12 @@ public class SpiceControls {
         }
         {//Fc Forward bias depletion capacitance coefficient
             Label variable = new Label("Fc: ");
-            diodeControls.add(variable, 0, 9);
+            diodeControls.add(variable, 0, 7);
             NumberField varField = new NumberField(sim.diode.FC);
             Tooltip tooltip = new Tooltip("Forward bias depletion capacitance coefficient");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 9);
+            diodeControls.add(varField, 1, 7);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -170,6 +174,7 @@ public class SpiceControls {
                 }
             });
         }
+        /*
         {//Isr Forward bias depletion capacitance coefficient
             Label variable = new Label("Isr: ");
             diodeControls.add(variable, 0, 10);
@@ -186,6 +191,8 @@ public class SpiceControls {
                 }
             });
         }
+        */
+        /*
         {//Nr Reverse emission coefficient
             Label variable = new Label("Nr: ");
             diodeControls.add(variable, 0, 11);
@@ -202,14 +209,15 @@ public class SpiceControls {
                 }
             });
         }
+        */
         {//Bv Reverse breakdown voltage
             Label variable = new Label("Bv: ");
-            diodeControls.add(variable, 0, 12);
+            diodeControls.add(variable, 0, 8);
             NumberField varField = new NumberField(sim.diode.BV);
             Tooltip tooltip = new Tooltip("Reverse breakdown voltage");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 12);
+            diodeControls.add(varField, 1, 8);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -220,12 +228,12 @@ public class SpiceControls {
         }
         {//Ibv Reverse breakdown current
             Label variable = new Label("Ibv: ");
-            diodeControls.add(variable, 0, 13);
+            diodeControls.add(variable, 0, 9);
             NumberField varField = new NumberField(sim.diode.IBV);
             Tooltip tooltip = new Tooltip("Reverse breakdown current");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 13);
+            diodeControls.add(varField, 1, 9);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
@@ -236,12 +244,12 @@ public class SpiceControls {
         }
         {//Tt Transit time
             Label variable = new Label("Tt: ");
-            diodeControls.add(variable, 0, 14);
+            diodeControls.add(variable, 0, 10);
             NumberField varField = new NumberField(sim.diode.TT);
             Tooltip tooltip = new Tooltip("Transit time");
             varField.setTooltip(tooltip);
             varField.setEditable(true);
-            diodeControls.add(varField, 1, 14);
+            diodeControls.add(varField, 1, 10);
 
             varField.setOnAction(e -> {
                 if ((varField.getText() != null && !varField.getText().isEmpty())) {
