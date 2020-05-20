@@ -3,6 +3,7 @@ package chartpanel;
 import javafx.scene.control.TextField;
 
 //Поле для ввода значений int
+
 public class IntNumberField extends TextField {
     String numberRegEx = "[0-9]*";
 

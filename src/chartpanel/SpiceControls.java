@@ -42,42 +42,6 @@ public class SpiceControls {
                 }
             });
         }
-        /*
-        {//Rs Ohmic resistance
-            Label variable = new Label("Rs: ");
-            diodeControls.add(variable, 0, 2);
-            NumberField varField = new NumberField(sim.diode.RS);
-            Tooltip tooltip = new Tooltip("Ohmic resistance");
-            varField.setTooltip(tooltip);
-            varField.setEditable(true);
-            diodeControls.add(varField, 1, 2);
-
-            varField.setOnAction(e -> {
-                if ((varField.getText() != null && !varField.getText().isEmpty())) {
-                    sim.diode.RS = varField.getDouble();
-                    sim.simulate(plot);
-                }
-            });
-        }
-        */
-        /*
-        {//Ikf Forward knee current
-            Label variable = new Label("Ikf: ");
-            diodeControls.add(variable, 0, 3);
-            NumberField varField = new NumberField(sim.diode.IKF);
-            Tooltip tooltip = new Tooltip("Forward knee current");
-            varField.setTooltip(tooltip);
-            varField.setEditable(true);
-            diodeControls.add(varField, 1, 3);
-
-            varField.setOnAction(e -> {
-                if ((varField.getText() != null && !varField.getText().isEmpty())) {
-                    sim.diode.IKF = varField.getDouble();
-                    sim.simulate(plot);
-                }
-            });
-        }
-        */
         {//Xti Forward knee current
             Label variable = new Label("Xti: ");
             diodeControls.add(variable, 0, 2);
@@ -174,42 +138,6 @@ public class SpiceControls {
                 }
             });
         }
-        /*
-        {//Isr Forward bias depletion capacitance coefficient
-            Label variable = new Label("Isr: ");
-            diodeControls.add(variable, 0, 10);
-            NumberField varField = new NumberField(sim.diode.I_SR);
-            Tooltip tooltip = new Tooltip("Recombination current");
-            varField.setTooltip(tooltip);
-            varField.setEditable(true);
-            diodeControls.add(varField, 1, 10);
-
-            varField.setOnAction(e -> {
-                if ((varField.getText() != null && !varField.getText().isEmpty())) {
-                    sim.diode.I_SR = varField.getDouble();
-                    sim.simulate(plot);
-                }
-            });
-        }
-        */
-        /*
-        {//Nr Reverse emission coefficient
-            Label variable = new Label("Nr: ");
-            diodeControls.add(variable, 0, 11);
-            NumberField varField = new NumberField(sim.diode.NR);
-            Tooltip tooltip = new Tooltip("Reverse emission coefficient");
-            varField.setTooltip(tooltip);
-            varField.setEditable(true);
-            diodeControls.add(varField, 1, 11);
-
-            varField.setOnAction(e -> {
-                if ((varField.getText() != null && !varField.getText().isEmpty())) {
-                    sim.diode.NR = varField.getDouble();
-                    sim.simulate(plot);
-                }
-            });
-        }
-        */
         {//Bv Reverse breakdown voltage
             Label variable = new Label("Bv: ");
             diodeControls.add(variable, 0, 8);

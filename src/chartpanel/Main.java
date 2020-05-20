@@ -4,15 +4,10 @@ import de.gsi.chart.XYChart;
 import de.gsi.chart.axes.spi.DefaultNumericAxis;
 import de.gsi.chart.plugins.DataPointTooltip;
 import de.gsi.chart.plugins.EditAxis;
-import de.gsi.chart.plugins.UpdateAxisLabels;
 import de.gsi.chart.plugins.Zoomer;
-import de.gsi.chart.ui.geometry.Side;
 import javafx.application.Application;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -26,7 +21,7 @@ public class Main extends Application {
         final StackPane root = new StackPane();
         HBox scope = new HBox();
         scope.setSpacing(10);
-
+        
         //Две оси и график с этими осями
         DefaultNumericAxis xAxis = new DefaultNumericAxis();
         xAxis.setMinorTickCount(5);

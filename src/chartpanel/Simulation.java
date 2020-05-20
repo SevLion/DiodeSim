@@ -1,9 +1,6 @@
 package chartpanel;
 
 import de.gsi.chart.XYChart;
-import de.gsi.chart.axes.spi.DefaultNumericAxis;
-import de.gsi.chart.plugins.DataPointTooltip;
-import de.gsi.chart.plugins.EditAxis;
 import de.gsi.chart.plugins.Zoomer;
 import de.gsi.chart.renderer.Renderer;
 import de.gsi.chart.renderer.spi.ErrorDataSetRenderer;
@@ -52,9 +49,6 @@ public class Simulation {
         }
         if(temperature) {
             Temperature(chart);
-        }
-        if(junctionvoltage) {
-           JunctionVoltage(chart);
         }
     }
 
@@ -231,58 +225,6 @@ public class Simulation {
         chart.setTitle("Junction charge");
     }
 
-    void JunctionVoltage(XYChart chart) {
-        //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
-        final DoubleDataSet junctionVoltage = new DoubleDataSet("charge");
-
-        //Запрещаем проверять, обновились ли датасеты, чтобы не отрисовывать график частично
-        junctionVoltage.autoNotification().set(false);
-
-
-
-
-        Runnable task = () -> {
-            final double[] t_in = getRange(Xmin, Xmax, N_SAMPLES);
-            double[] junctionVoltageValues = new double[N_SAMPLES];
-
-            //Моделируем
-            junctionVoltageValues = diode.getResponseVJT(t_in);
-            //Передаём в датасет
-            junctionVoltage.set(t_in, junctionVoltageValues);
-        };
-        Thread taskThread = new Thread(task);
-        taskThread.start();
-        try {
-            taskThread.join();
-        } catch(InterruptedException e) {
-
-        }
-
-        //Разрешаем перестроить график
-        junctionVoltage.autoNotification().set(true);
-
-        //Очищаем график, чттобы не было старых кривых
-        chart.getDatasets().clear();
-        //Передаём датасеты в график
-        chart.getDatasets().addAll(junctionVoltage);
-        //Названия осей
-        chart.getYAxis().setName("VJ(T), В");
-        chart.getXAxis().setName("T, K");
-        //Названия осей ??
-        //junctionVoltage.getAxisDescription(DIM_X).set("Voltage", "V_d");
-        //junctionVoltage.getAxisDescription(DIM_Y).set("Charge", "Q_d");
-
-        chart.updateAxisRange();
-        //chart.getYAxis().setAutoRanging(true);
-        //chart.getXAxis().setAutoRanging(true);
-        chart.getYAxis().forceRedraw();
-        chart.getXAxis().forceRedraw();
-        //??
-        Renderer renderer1 = new ErrorDataSetRenderer();
-        renderer1.getDatasets().add(junctionVoltage);
-        chart.setTitle("Junction voltage (T)");
-    }
-
     void Temperature(XYChart chart) {
         //Датасет для библиотеки, в который нужно передать массив с данными для отрисовки
         final DoubleDataSet current_response1 = new DoubleDataSet("current_response at " + T1 + "K");
@@ -322,8 +264,6 @@ public class Simulation {
         } catch(InterruptedException e) {
 
         }
-
-
 
         //Разрешаем перестроить график
         current_response1.autoNotification().set(true);
