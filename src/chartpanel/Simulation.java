@@ -21,11 +21,17 @@ public class Simulation {
     Diode diode = new Diode();
     Signal signal = new Signal();
 
+    Zoomer zoomer;
+
     //Флаги для определения того, какой график строить
     boolean voltampere = true;
     boolean signalresponse = false;
     boolean temperature = false;
     boolean junctioncharge = false;
+
+    Simulation(Zoomer zoomer) {
+        this.zoomer = zoomer;
+    }
 
 
     //Вызывается снаружи для построения графика
@@ -82,9 +88,16 @@ public class Simulation {
         chart.getYAxis().setName("U_d, В; I_d, А");
         chart.getXAxis().setName("t, с");
 
+
+        chart.updateAxisRange();
+        //chart.getYAxis().setAutoRanging(true);
+        //chart.getXAxis().setAutoRanging(true);
+        chart.getYAxis().forceRedraw();
+        chart.getXAxis().forceRedraw();
         //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(response);
+        chart.setTitle("Signal response");
     }
 
     void Volt_Ampere(XYChart chart) {
@@ -118,6 +131,11 @@ public class Simulation {
         current_response.getAxisDescription(DIM_X).set("Voltage", "V_d");
         current_response.getAxisDescription(DIM_Y).set("Current", "I_d");
 
+        chart.setTitle("Volt-Ampere");
+        //chart.getYAxis().setAutoRanging(true);
+        //chart.getXAxis().setAutoRanging(true);
+        chart.getYAxis().forceRedraw();
+        chart.getXAxis().forceRedraw();
         //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(current_response);
@@ -154,9 +172,15 @@ public class Simulation {
         charge.getAxisDescription(DIM_X).set("Voltage", "V_d");
         charge.getAxisDescription(DIM_Y).set("Charge", "Q_d");
 
+        chart.updateAxisRange();
+        //chart.getYAxis().setAutoRanging(true);
+        //chart.getXAxis().setAutoRanging(true);
+        chart.getYAxis().forceRedraw();
+        chart.getXAxis().forceRedraw();
         //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().add(charge);
+        chart.setTitle("Junction charge");
     }
 
     void Temperature(XYChart chart) {
@@ -204,15 +228,22 @@ public class Simulation {
         //current_response1.getAxisDescription(DIM_X).set("Voltage", "V_d");
         //current_response1.getAxisDescription(DIM_Y).set("Current", "I_d");
 
+
+        diode.T = T;
+        chart.setTitle("Volt-Ampere temperature");
+        chart.updateAxisRange();
+        //chart.getYAxis().setAutoRanging(true);
+        //chart.getXAxis().setAutoRanging(true);
+        chart.getYAxis().forceRedraw();
+        chart.getXAxis().forceRedraw();
         //??
         Renderer renderer1 = new ErrorDataSetRenderer();
         renderer1.getDatasets().addAll(current_response1, current_response2, current_response3);
-
-        diode.T = T;
     }
 
 
     double[] getRange(final double Xmin, final double Xmax, final int N_SAMPLES) {
+
         double[] range = new double[N_SAMPLES];
         double inc = Math.abs((Xmax - Xmin) / N_SAMPLES);
         range[0] = Xmin;

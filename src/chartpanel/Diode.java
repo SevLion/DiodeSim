@@ -1,5 +1,7 @@
 package chartpanel;
 
+import java.util.concurrent.Executor;
+
 public class Diode {
 
     boolean temperature = false;
@@ -90,7 +92,7 @@ public class Diode {
     }
 
     void temperatureDependene() {
-        IS_d_T = IS_d * Math.pow((T / TMEAS), XTI / N) * Math.exp(((T / TMEAS) - 1) * (EG / V_t));
+        IS_d_T = IS_d * Math.pow((T / TMEAS), XTI / N) * Math.exp(((T / TMEAS) - 1) * (EG / (V_t)));
 
 
         //Корректировка полученных значений согласно температурным зависимостям

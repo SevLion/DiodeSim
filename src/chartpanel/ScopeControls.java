@@ -70,15 +70,15 @@ public class ScopeControls {
                 });
             }
 
+            CheckBox logYAxis = new CheckBox("Log Y axis");
             {
                 //Изменение оси на логарифмическую
-                CheckBox logYAxis = new CheckBox("Log Y axis");
                 scopeControls.add(logYAxis, 1, 4);
                 logYAxis.setOnAction(e -> {
                     if (logYAxis.isSelected()) {
                         yAxis.setLogAxis(true);
                         yAxis.setLogarithmBase(10);
-                        sim.Volt_Ampere(showingPlot);
+                        sim.simulate(showingPlot);
                     } else {
                         yAxis.setLogAxis(false);
                         sim.simulate(showingPlot);
@@ -102,6 +102,7 @@ public class ScopeControls {
                         sim.junctioncharge = false;
                         sim.temperature = false;
                         signalSelector.setVisible(false);
+                        logYAxis.setVisible(true);
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Signal response") {
                         sim.diode.temperature = false;
@@ -110,6 +111,7 @@ public class ScopeControls {
                         sim.junctioncharge = false;
                         sim.temperature = false;
                         signalSelector.setVisible(true);
+                        logYAxis.setVisible(false);
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Temperature") {
                         sim.diode.temperature = true;
@@ -118,6 +120,7 @@ public class ScopeControls {
                         sim.junctioncharge = false;
                         sim.temperature = true;
                         signalSelector.setVisible(false);
+                        logYAxis.setVisible(true);
                         sim.simulate(showingPlot);
                     } else if (modeSelector.getValue() == "Junction charge") {
                         sim.diode.temperature = false;
@@ -126,6 +129,7 @@ public class ScopeControls {
                         sim.junctioncharge = true;
                         sim.temperature = false;
                         signalSelector.setVisible(false);
+                        logYAxis.setVisible(true);
                         sim.simulate(showingPlot);
                     }
                 });

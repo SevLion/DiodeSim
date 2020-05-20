@@ -8,8 +8,11 @@ import de.gsi.chart.plugins.UpdateAxisLabels;
 import de.gsi.chart.plugins.Zoomer;
 import de.gsi.chart.ui.geometry.Side;
 import javafx.application.Application;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
@@ -33,7 +36,9 @@ public class Main extends Application {
         plot.setTitle("ВАХ");
 
         //Добавляем плагины, чтобы можно было интерактивно взаимодействовать с графиком
-        plot.getPlugins().add(new Zoomer());
+        Zoomer zoomer = new Zoomer();
+        zoomer.zoomOrigin();
+        plot.getPlugins().add(zoomer);
         plot.getPlugins().add(new EditAxis());
         //plot.getPlugins().add(new EditDataSet());
         plot.getPlugins().add(new DataPointTooltip());
@@ -56,7 +61,7 @@ public class Main extends Application {
         scope.getChildren().addAll(plot, scopeControls, diodeControls);
 
         //Создаём симуляцию и запускаем первый раз
-        Simulation sim = new Simulation();
+        Simulation sim = new Simulation(zoomer);
         sim.simulate(plot);
 
         //Чтобы график растягивался при масштабировании окна
