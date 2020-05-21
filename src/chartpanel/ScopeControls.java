@@ -17,7 +17,7 @@ public class ScopeControls {
                 //Слева в таблицу добавляем Label, справа - NumberField
                 scopeControls.add(xmin, 0, 0);
                 NumberField varField = new NumberField(sim.Xmin);
-                Tooltip tooltip = new Tooltip("V_d max");
+                Tooltip tooltip = new Tooltip("Xmin");
                 varField.setTooltip(tooltip);
                 varField.setEditable(true);
                 scopeControls.add(varField, 1, 0);
